@@ -20,7 +20,8 @@
 #image-container {  
     width: 80%;  
     height: auto;  
-    margin-bottom: 20px;  
+    margin-bottom: 20px;
+    align-items: center;
 } 
   
 .choice {  
