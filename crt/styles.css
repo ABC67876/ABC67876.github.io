@@ -14,7 +14,14 @@
     width: 80%;  
     height: auto;  
     margin-bottom: 20px;  
-}  
+}
+
+#image-container {  
+    width: 80%;  
+    height: auto;  
+    margin-bottom: 20px;
+    align-items: center;
+} 
   
 .choice {  
     width: 20%;  
