@@ -25,8 +25,8 @@ document.getElementById('image-container').addEventListener('click', function(ev
     const rect = img.getBoundingClientRect();  
   
     // 计算点击位置相对于图片的坐标  
-    const x = event.clientX - rect.left;  
-    const y = event.clientY - rect.top;
+    const x = (event.clientX - rect.left)*238/rect.height;  
+    const y = (event.clientY - rect.top)*238/rect.height; 
 
     let row = 0;
     // [412, 506, 554, 650]
