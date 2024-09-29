@@ -66,7 +66,7 @@ document.getElementById('image-container').addEventListener('click', function(ev
     }
 
     if (row==0 && col==0) {
-        alert('1 选项被点击');  
+        alert('1 选项被点击 test');  
     } else if (row==0 && col==1) {
         alert('2 选项被点击');  
     } else if (row==0 && col==2) {
@@ -78,7 +78,7 @@ document.getElementById('image-container').addEventListener('click', function(ev
     } else if (row==1 && col==2) {
         alert('6 选项被点击');  
     } else if (row==0 && col==3) {
-        alert('1 选项被点击');  
+        alert('1 选项被点击 test');  
     } else if (row==0 && col==4) {
         alert('2 选项被点击');  
     } else if (row==0 && col==5) {
