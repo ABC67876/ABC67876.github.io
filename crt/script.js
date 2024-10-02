@@ -24,6 +24,11 @@ function loadQuestion(index) {
     answerImage.src = 'assets/{}_answer.png'.replace('{}', index + 1);
     questionImage.src = 'assets/{}_question.png'.replace('{}', index + 1);
     counter.innerText = index + 1;
+    if (answered[index] != 0) {
+        nextBtn.style.display = 'block';
+    } else {
+        nextBtn.style.display = 'none';
+    }
 }
   
 loadQuestion(currentQuestion); // 加载第一题  
