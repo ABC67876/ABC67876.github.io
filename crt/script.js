@@ -1,24 +1,88 @@
 let currentQuestion = 0;  
 
+let answers = [
+    4, 5, 1, 2, 6, 3, 6, 2, 1, 3, 4, 5,
+    4, 5, 1, 6, 2, 1, 3, 4, 6, 3, 5, 2,
+    2, 6, 1, 2, 1, 3, 5, 6, 4, 3, 4, 5,
+    8, 2, 3, 8, 7, 4, 5, 1, 7, 6, 1, 2,
+    3, 4, 3, 7, 8, 6, 5, 4, 1, 2, 5, 6,
+    7, 6, 8, 2, 1, 5, 1, 6, 3, 2, 4, 5
+];
+
+let answered = new Array(72).fill(0);
+let jumped = new Array(72).fill(0);
+let corrects = new Array(72).fill(0);
+
 const questionImage = document.getElementById('question-image');
 const answerImage = document.getElementById('Answer-image');    
-const nextBtn = document.getElementById('next-btn');  
+const nextBtn = document.getElementById('next-btn'); 
+const prevBtn = document.getElementById('prev-btn'); 
+const counter = document.getElementById('counter'); 
   
 function loadQuestion(index) {  
     // const question = questions[index];  
     answerImage.src = 'assets/{}_answer.png'.replace('{}', index + 1);
     questionImage.src = 'assets/{}_question.png'.replace('{}', index + 1);
+    counter.innerText = index + 1;
 }
   
 loadQuestion(currentQuestion); // 加载第一题  
   
-nextBtn.addEventListener('click', () => {  
-    loadQuestion(++currentQuestion);  
-    if (currentQuestion >= 72) {  
+nextBtn.addEventListener('click', () => {
+    currentQuestion++;
+    while (currentQuestion <= 71 && jumped[currentQuestion] == 1) {
+        // console.log(currentQuestion);
+        currentQuestion++;
+    }
+
+    if (currentQuestion > 71) {  
         alert('Quiz Completed!');  
         currentQuestion = 0; // 重置或进行其他操作  
-    }  
+    }
+    loadQuestion(currentQuestion); 
 });
+
+prevBtn.addEventListener('click', () => {
+    currentQuestion--;
+    while (currentQuestion >= 71 && jumped[currentQuestion] == 1) {
+        currentQuestion--;
+    }
+    if (currentQuestion < 0) {
+        alert('已经是第一题了');
+        currentQuestion = 0;
+        return;
+    }  
+    loadQuestion(currentQuestion);
+});
+
+function checkAnswer(answer) {  
+    answered[currentQuestion] = answer;
+    if (answer === answers[currentQuestion]) {  
+        corrects[currentQuestion] = 1; 
+    }
+    let stage = Math.floor(currentQuestion / 12);
+    if (stage >= 3) { 
+        let adja_errors = 0;
+        for (let i = Math.floor(currentQuestion / 12)*12; i <= Math.min(Math.floor(currentQuestion / 12)*12+12, 71); i++) {
+            jumped[i] = 0;
+        }
+        for (let i = Math.floor(currentQuestion / 12)*12; i <= currentQuestion; i++) {
+            if (corrects[i] == 0) {
+                adja_errors++;
+            } else {
+                adja_errors = 0;
+            }
+            if (adja_errors >= 3) {
+                alert("jump!");
+                for (let j = currentQuestion+1; j <= Math.min(Math.floor(currentQuestion / 12)*12+12, 71); j++) {
+                    jumped[j] = 1;
+                }
+                break;
+            }
+        }
+    }
+}
+
 
 document.getElementById('image-container').addEventListener('click', function(event) {  
     const img = document.getElementById('Answer-image');  
@@ -66,33 +130,33 @@ document.getElementById('image-container').addEventListener('click', function(ev
     }
 
     if (row==0 && col==0) {
-        alert('1 选项被点击 test');  
+        checkAnswer(1);  
     } else if (row==0 && col==1) {
-        alert('2 选项被点击');  
+        checkAnswer(2); 
     } else if (row==0 && col==2) {
-        alert('3 选项被点击');  
+        checkAnswer(3);
     } else if (row==1 && col==0) {
-        alert('4 选项被点击');  
+        checkAnswer(4);  
     } else if (row==1 && col==1) {
-        alert('5 选项被点击');  
+        checkAnswer(5);  
     } else if (row==1 && col==2) {
-        alert('6 选项被点击');  
+        checkAnswer(6);  
     } else if (row==0 && col==3) {
-        alert('1 选项被点击 test');  
+        checkAnswer(1); 
     } else if (row==0 && col==4) {
-        alert('2 选项被点击');  
+        checkAnswer(2);  
     } else if (row==0 && col==5) {
-        alert('3 选项被点击');  
+        checkAnswer(3);
     } else if (row==0 && col==6) {
-        alert('4 选项被点击');  
+        checkAnswer(4);  
     } else if (row==1 && col==3) {
-        alert('5 选项被点击');  
+        checkAnswer(5);  
     } else if (row==1 && col==4) {
-        alert('6 选项被点击');  
+        checkAnswer(6);  
     } else if (row==1 && col==5) {
-        alert('7 选项被点击');  
+        checkAnswer(7);  
     } else if (row==1 && col==6) {
-        alert('8 选项被点击');  
+        checkAnswer(8);  
     }
     nextBtn.click();
 });
