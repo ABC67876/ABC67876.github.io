@@ -38,6 +38,9 @@ audioPlayer.addEventListener('ended', function() {
 });
 
 function loadQuestion(index) {
+    if (index >= 120) {
+        return;
+    }
     replayBtn.style.display = 'block';
     nextBtn.style.display = 'none';
     if (is_pre_question>0) {
@@ -49,10 +52,6 @@ function loadQuestion(index) {
         return;
     }
 
-    // const question = questions[index];
-    if (index >= 120) {
-        return;
-    }
     needplaytwice = 1;
     audioPlayer.src = 'assets/audios/{}.wav'.replace('{}', index + 1);  
     questionImage.src = 'assets/images/{}.png'.replace('{}', index + 1);
@@ -103,6 +102,7 @@ function checkAnswer(answer) {
         replayBtn.style.display = 'none';
         counter.innerText = '测试完成，您的得分为 {} 分。\n您可以退出测试网页了。'.replace('{}', sum);
         currentQuestion = 120;
+        return;
     }
 }
   
@@ -135,7 +135,7 @@ nextBtn.addEventListener('click', () => {
     } else if (nextBtn.innerText == '开始答题') {
         nextBtn.innerText = '下一题';
         questionImage.style.display = 'block';
-        nextBtn.style.display = 'block';
+        nextBtn.style.display = 'none';
         is_pre_question = 0;
         loadQuestion(currentQuestion);
         return;
