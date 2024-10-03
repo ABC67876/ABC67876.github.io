@@ -9,6 +9,8 @@ let answers = [
     7, 6, 8, 2, 1, 5, 1, 6, 3, 2, 4, 5
 ];
 
+let is_pre_question = 1; //0 for official question, 1,2,3... for pre-question
+
 let answered = new Array(72).fill(0);
 let jumped = new Array(72).fill(0);
 let corrects = new Array(72).fill(0);
@@ -19,7 +21,15 @@ const nextBtn = document.getElementById('next-btn');
 const prevBtn = document.getElementById('prev-btn'); 
 const counter = document.getElementById('counter'); 
   
-function loadQuestion(index) {  
+function loadQuestion(index) {
+    if (is_pre_question>0) {
+        index = is_pre_question-1;
+        answerImage.src = 'assets/{}_answer.png'.replace('{}', index + 1);
+        questionImage.src = 'assets/{}_question.png'.replace('{}', index + 1);
+        counter.innerText = '试做题目{}'.replace('{}', index + 1);
+        return;
+    }
+
     // const question = questions[index];  
     answerImage.src = 'assets/{}_answer.png'.replace('{}', index + 1);
     questionImage.src = 'assets/{}_question.png'.replace('{}', index + 1);
@@ -30,10 +40,48 @@ function loadQuestion(index) {
         nextBtn.style.display = 'none';
     }
 }
-  
-loadQuestion(currentQuestion); // 加载第一题  
+
+questionImage.style.display = 'none';
+answerImage.style.display = 'none';
+nextBtn.style.display = 'none';
+prevBtn.style.display = 'none';
+counter.style.display = 'none';
+function submitForm() {
+    var name = document.getElementById("name").value;
+    var gender = document.getElementById("gender").value;
+    var birthday = document.getElementById("birthday").value;
+    
+    alert("Name: " + name + "\nGender: " + gender + "\nBirthday: " + birthday);
+
+    document.getElementById('personalInfoForm').style.display = 'none';
+    counter.style.display = 'block';
+    counter.innerText = '首先是试做部分，这个页面需要写点什么提示呢？';
+    nextBtn.style.display = 'block';
+    nextBtn.innerText = '开始试做';
+}
+
+// loadQuestion(currentQuestion); // 加载第一题  
   
 nextBtn.addEventListener('click', () => {
+
+    if (nextBtn.innerText == '开始试做') {
+        nextBtn.innerText == '下一题';
+        nextBtn.style.display = 'none';
+        questionImage.style.display = 'block';
+        answerImage.style.display = 'block';
+        loadQuestion(currentQuestion);
+        return;
+    } else if (nextBtn.innerText == '开始答题') {
+        nextBtn.innerText = '下一题';
+        questionImage.style.display = 'block';
+        answerImage.style.display = 'block';
+        nextBtn.style.display = 'block';
+        prevBtn.style.display = 'block';
+        is_pre_question = 0;
+        loadQuestion(currentQuestion);
+        return;
+    }
+
     currentQuestion++;
     while (currentQuestion <= 71 && jumped[currentQuestion] == 1) {
         // console.log(currentQuestion);
@@ -69,13 +117,34 @@ prevBtn.addEventListener('click', () => {
     loadQuestion(currentQuestion);
 });
 
-function checkAnswer(answer) {  
+function checkAnswer(answer) {
+
+    if (is_pre_question>0) {
+        if (answers[is_pre_question-1] != answer) {
+            alert("试做题回答错误，请再次尝试。");
+            return;
+        } else {
+            if (is_pre_question == 3) {
+                counter.innerText = '试做部分完成，接下来是正式测试部分。';
+                nextBtn.innerText = '开始答题';
+                nextBtn.style.display = 'block';
+                questionImage.style.display = 'none';
+                answerImage.style.display = 'none';
+
+            } else {
+                is_pre_question++;
+                loadQuestion(currentQuestion);
+            }
+            return;
+        }
+    }
+
     answered[currentQuestion] = answer;
     if (answer === answers[currentQuestion]) {  
         corrects[currentQuestion] = 1; 
     }
     let stage = Math.floor(currentQuestion / 12);
-    if (stage >= 3*0) { 
+    if (stage >= 3) { 
         let adja_errors = 0;
         for (let i = Math.floor(currentQuestion / 12)*12; i < Math.min(Math.floor(currentQuestion / 12)*12+12, 72); i++) {
             jumped[i] = 0;
@@ -172,5 +241,7 @@ document.getElementById('image-container').addEventListener('click', function(ev
     } else if (row==1 && col==6) {
         checkAnswer(8);  
     }
-    nextBtn.click();
+    if (nextBtn.innerText != '开始答题') {
+        nextBtn.click();
+    }
 });
