@@ -23,7 +23,7 @@ function loadQuestion(index) {
     // const question = questions[index];  
     answerImage.src = 'assets/{}_answer.png'.replace('{}', index + 1);
     questionImage.src = 'assets/{}_question.png'.replace('{}', index + 1);
-    counter.innerText = index + 1;
+    counter.innerText = '题目{}/72'.replace('{}', index + 1);
     if (answered[index] != 0) {
         nextBtn.style.display = 'block';
     } else {
@@ -41,8 +41,17 @@ nextBtn.addEventListener('click', () => {
     }
 
     if (currentQuestion > 71) {  
-        alert('Quiz Completed!');  
-        currentQuestion = 0; // 重置或进行其他操作  
+        let final_score = 0;
+        for (let i = 0; i <= 71; i++) {
+            final_score += corrects[i]*(1-jumped[i]);
+        }
+        // alert('Quiz Completed! Score: ' + final_score + '/72');
+        questionImage.style.display = 'none';
+        answerImage.style.display = 'none';
+        nextBtn.style.display = 'none';
+        prevBtn.style.display = 'none';
+        counter.innerText = '测试完成，您的得分为 {} 分。\n您可以退出测试网页了。'.replace('{}', final_score);
+        return;
     }
     loadQuestion(currentQuestion); 
 });
@@ -66,9 +75,9 @@ function checkAnswer(answer) {
         corrects[currentQuestion] = 1; 
     }
     let stage = Math.floor(currentQuestion / 12);
-    if (stage >= 3) { 
+    if (stage >= 3*0) { 
         let adja_errors = 0;
-        for (let i = Math.floor(currentQuestion / 12)*12; i <= Math.min(Math.floor(currentQuestion / 12)*12+12, 71); i++) {
+        for (let i = Math.floor(currentQuestion / 12)*12; i < Math.min(Math.floor(currentQuestion / 12)*12+12, 72); i++) {
             jumped[i] = 0;
         }
         for (let i = Math.floor(currentQuestion / 12)*12; i <= currentQuestion; i++) {
@@ -79,7 +88,7 @@ function checkAnswer(answer) {
             }
             if (adja_errors >= 3) {
                 alert("jump!");
-                for (let j = currentQuestion+1; j <= Math.min(Math.floor(currentQuestion / 12)*12+12, 71); j++) {
+                for (let j = currentQuestion+1; j < Math.min(Math.floor(currentQuestion / 12)*12+12, 72); j++) {
                     jumped[j] = 1;
                 }
                 break;

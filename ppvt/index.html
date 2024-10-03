@@ -6,9 +6,10 @@
     <title>Quiz Test</title>  
     <link rel="stylesheet" href="styles.css">  
 </head>  
-<body>  
+<body oncontextmenu='return false' ondragstart='return false' onselectstart ='return false' onselect='document.selection.empty()' oncopy='document.selection.empty()' onbeforecopy='return false'> 
     <div id="quiz-container">  
         <div id="question-container">
+            <div id="counter" 0></div>
             <button id="replay-btn" style="margin-bottom: 10px;">Replay Audio</button>  
             <audio id="audio-player" controls autoplay hidden></audio>  
             <!-- <img id="question-image" src="" alt="Question Image">  -->

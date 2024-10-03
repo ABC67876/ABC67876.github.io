@@ -39,3 +39,9 @@
     font-size: 16px;  
     cursor: pointer;  
 }
+#counter {  
+    top: 10px;
+    bottom: 10px;  
+    right: 10px;  
+    font-size: 20px;  
+}

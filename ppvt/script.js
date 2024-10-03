@@ -24,6 +24,8 @@ const audioPlayer = document.getElementById('audio-player');
 const replayBtn = document.getElementById('replay-btn');
 const questionImage = document.getElementById('question-image');  
 const nextBtn = document.getElementById('next-btn');  
+const counter = document.getElementById('counter'); 
+nextBtn.style.display = 'none';
 
 var needplaytwice = 0;
 audioPlayer.addEventListener('ended', function() {  
@@ -35,9 +37,13 @@ audioPlayer.addEventListener('ended', function() {
 
 function loadQuestion(index) {  
     // const question = questions[index];
+    if (index >= 120) {
+        return;
+    }
     needplaytwice = 1;
     audioPlayer.src = 'assets/audios/{}.wav'.replace('{}', index + 1);  
-    questionImage.src = 'assets/images/{}.png'.replace('{}', index + 1); 
+    questionImage.src = 'assets/images/{}.png'.replace('{}', index + 1);
+    counter.innerText = '题目{}/120'.replace('{}', index + 1);
 }  
 
 function checkAnswer(answer) {  
@@ -59,18 +65,22 @@ function checkAnswer(answer) {
         for (let i = 0; i <= currentQuestion; i++) {  
             sum += corrects[i];  
         }
-        alert('Correct: ' + sum + '/120');
+        // alert('Correct: ' + sum + '/120');
+        questionImage.style.display = 'none';
+        replayBtn.style.display = 'none';
+        counter.innerText = '测试完成，您的得分为 {} 分。\n您可以退出测试网页了。'.replace('{}', sum);
+        currentQuestion = 120;
     }
-
 }
   
 loadQuestion(currentQuestion); // 加载第一题  
   
 nextBtn.addEventListener('click', () => {  
-    loadQuestion(++currentQuestion);  
+    loadQuestion(++currentQuestion);
     if (currentQuestion >= questions.length) {  
-        alert('Quiz Completed!');  
-        currentQuestion = 0; // 重置或进行其他操作  
+        // alert('Quiz Completed!');  
+        // currentQuestion = 0; // 重置或进行其他操作
+        return; 
     }  
 });
 
