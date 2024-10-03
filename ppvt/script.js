@@ -39,6 +39,7 @@ audioPlayer.addEventListener('ended', function() {
 
 function loadQuestion(index) {
     replayBtn.style.display = 'block';
+    nextBtn.style.display = 'none';
     if (is_pre_question>0) {
         index = is_pre_question-1;
         needplaytwice = 1;
